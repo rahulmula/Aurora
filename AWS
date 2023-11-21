@@ -1,0 +1,78 @@
+import boto3
+import openpyxl
+
+def get_ec2_tags(ec2_client):
+    ec2_instances = ec2_client.describe_instances()['Reservations']
+    tags_data = []
+
+    for reservation in ec2_instances:
+        for instance in reservation['Instances']:
+            instance_id = instance['InstanceId']
+            tags = instance.get('Tags', [])
+            for tag in tags:
+                tags_data.append(['EC2', instance_id, tag['Key'], tag['Value']])
+                
+    return tags_data
+
+def get_s3_tags(s3_client):
+    s3_buckets = s3_client.list_buckets()['Buckets']
+    tags_data = []
+
+    for bucket in s3_buckets:
+        bucket_name = bucket['Name']
+        tags = s3_client.get_bucket_tagging(Bucket=bucket_name).get('TagSet', [])
+        for tag in tags:
+            tags_data.append(['S3', bucket_name, tag['Key'], tag['Value']])
+                
+    return tags_data
+
+def get_rds_tags(rds_client):
+    rds_instances = rds_client.describe_db_instances()['DBInstances']
+    tags_data = []
+
+    for instance in rds_instances:
+        db_instance_identifier = instance['DBInstanceIdentifier']
+        tags = rds_client.list_tags_for_resource(ResourceName=db_instance_identifier).get('TagList', [])
+        for tag in tags:
+            tags_data.append(['RDS', db_instance_identifier, tag['Key'], tag['Value']])
+                
+    return tags_data
+
+def get_all_tags():
+    # Replace 'YOUR_REGION' with your AWS region
+    region = 'YOUR_REGION'
+
+    # Replace 'YOUR_ACCESS_KEY' and 'YOUR_SECRET_KEY' with your AWS access key and secret key
+    aws_access_key = 'YOUR_ACCESS_KEY'
+    aws_secret_key = 'YOUR_SECRET_KEY'
+
+    # Create AWS clients for EC2, S3, and RDS
+    ec2_client = boto3.client('ec2', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+    s3_client = boto3.client('s3', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+    rds_client = boto3.client('rds', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+
+    # Get tags for each resource type
+    ec2_tags = get_ec2_tags(ec2_client)
+    s3_tags = get_s3_tags(s3_client)
+    rds_tags = get_rds_tags(rds_client)
+
+    # Create Excel workbook and sheet
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    # Write header row
+    sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+
+    # Append tags for each resource type to the sheet
+    for tags_data in [ec2_tags, s3_tags, rds_tags]:
+        for row in tags_data:
+            sheet.append(row)
+
+    # Save Excel file
+    workbook.save('all_tags_output.xlsx')
+
+def main():
+    get_all_tags()
+
+if __name__ == "__main__":
+    main()
