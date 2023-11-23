@@ -1,40 +1,37 @@
-import boto3
-import openpyxl
-
-def get_ec2_tags(ec2_client):
-    ec2_instances = ec2_client.describe_instances()['Reservations']
+def get_elb_tags(elbv2_client):
+    elbs = elbv2_client.describe_load_balancers()['LoadBalancers']
     tags_data = []
 
-    for reservation in ec2_instances:
-        for instance in reservation['Instances']:
-            instance_id = instance['InstanceId']
-            tags = instance.get('Tags', [])
-            for tag in tags:
-                tags_data.append(['EC2', instance_id, tag['Key'], tag['Value']])
+    for elb in elbs:
+        elb_arn = elb['LoadBalancerArn']
+        tags = elbv2_client.describe_tags(ResourceArns=[elb_arn]).get('TagDescriptions', [])
+        for tag_description in tags:
+            for tag in tag_description.get('Tags', []):
+                tags_data.append(['ELB', elb_arn, tag['Key'], tag['Value']])
                 
     return tags_data
 
-def get_s3_tags(s3_client):
-    s3_buckets = s3_client.list_buckets()['Buckets']
+def get_asg_tags(asg_client):
+    asgs = asg_client.describe_auto_scaling_groups()['AutoScalingGroups']
     tags_data = []
 
-    for bucket in s3_buckets:
-        bucket_name = bucket['Name']
-        tags = s3_client.get_bucket_tagging(Bucket=bucket_name).get('TagSet', [])
+    for asg in asgs:
+        asg_name = asg['AutoScalingGroupName']
+        tags = asg_client.describe_tags(Filters=[{'Name': 'auto-scaling-group', 'Values': [asg_name]}]).get('Tags', [])
         for tag in tags:
-            tags_data.append(['S3', bucket_name, tag['Key'], tag['Value']])
+            tags_data.append(['ASG', asg_name, tag['Key'], tag['Value']])
                 
     return tags_data
 
-def get_rds_tags(rds_client):
-    rds_instances = rds_client.describe_db_instances()['DBInstances']
+def get_elastic_ip_tags(ec2_client):
+    elastic_ips = ec2_client.describe_addresses()['Addresses']
     tags_data = []
 
-    for instance in rds_instances:
-        db_instance_identifier = instance['DBInstanceIdentifier']
-        tags = rds_client.list_tags_for_resource(ResourceName=db_instance_identifier).get('TagList', [])
+    for elastic_ip in elastic_ips:
+        allocation_id = elastic_ip['AllocationId']
+        tags = ec2_client.describe_tags(Filters=[{'Name': 'resource-id', 'Values': [allocation_id]}]).get('Tags', [])
         for tag in tags:
-            tags_data.append(['RDS', db_instance_identifier, tag['Key'], tag['Value']])
+            tags_data.append(['EIP', allocation_id, tag['Key'], tag['Value']])
                 
     return tags_data
 
@@ -46,15 +43,18 @@ def get_all_tags():
     aws_access_key = 'YOUR_ACCESS_KEY'
     aws_secret_key = 'YOUR_SECRET_KEY'
 
-    # Create AWS clients for EC2, S3, and RDS
+    # Create AWS clients for EC2, ELB, ASG
     ec2_client = boto3.client('ec2', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
-    s3_client = boto3.client('s3', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
-    rds_client = boto3.client('rds', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+    elbv2_client = boto3.client('elbv2', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+    asg_client = boto3.client('autoscaling', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
 
     # Get tags for each resource type
     ec2_tags = get_ec2_tags(ec2_client)
     s3_tags = get_s3_tags(s3_client)
     rds_tags = get_rds_tags(rds_client)
+    elb_tags = get_elb_tags(elbv2_client)
+    asg_tags = get_asg_tags(asg_client)
+    eip_tags = get_elastic_ip_tags(ec2_client)
 
     # Create Excel workbook and sheet
     workbook = openpyxl.Workbook()
@@ -64,15 +64,9 @@ def get_all_tags():
     sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
 
     # Append tags for each resource type to the sheet
-    for tags_data in [ec2_tags, s3_tags, rds_tags]:
+    for tags_data in [ec2_tags, s3_tags, rds_tags, elb_tags, asg_tags, eip_tags]:
         for row in tags_data:
             sheet.append(row)
 
     # Save Excel file
     workbook.save('all_tags_output.xlsx')
-
-def main():
-    get_all_tags()
-
-if __name__ == "__main__":
-    main()
