@@ -1,3 +1,15 @@
+def get_cloudwatch_alarm_tags(cloudwatch_client):
+    alarms = cloudwatch_client.describe_alarms()['MetricAlarms']
+    tags_data = []
+
+    for alarm in alarms:
+        alarm_name = alarm['AlarmName']
+        tags = cloudwatch_client.list_tags_for_resource(ResourceARN=alarm['AlarmArn']).get('Tags', [])
+        for tag in tags:
+            tags_data.append(['CloudWatchAlarm', alarm_name, tag['Key'], tag['Value']])
+                
+    return tags_data
+
 def get_elb_tags(elbv2_client):
     elbs = elbv2_client.describe_load_balancers()['LoadBalancers']
     tags_data = []
