@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-
+ARG COMPONENT_VAR
 #Install dependencies
 RUN apt-get update && \
     apt-get install -y unzip && \
@@ -13,7 +13,7 @@ COPY sqlpackage_linux.zip /sqltools/
 RUN unzip /sqltools/sqlpackage_linux.zip -d /sqltools/
 RUN rm -rf /sqltools/sqlpackage_linux.zip
 RUN chmod a+x /sqltools/sqlpackage
-COPY scripts/drawingmanager.sh  /drawingmanager.sh
+COPY scripts/$COMPONENT_VAR.sh  /$COMPONENT_VAR.sh
 
 ENV PATH="/sqltools/sqlpackage:${PATH}"
 
@@ -26,3 +26,4 @@ RUN pip install \
         awslambdaric
 
 ENTRYPOINT [ "/usr/bin/python3", "-m", "awslambdaric" ]
+CMD [ "app.handler", "pmt.sh" ]

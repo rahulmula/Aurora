@@ -1,8 +1,19 @@
 import subprocess
+import sys
 
 def lambda_handler(event, context):
     try:
-        process = subprocess.Popen(['/bin/bash', '/drawingmanager.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print(f'function loaded')
+        if len(sys.argv) < 2:
+            errormessage = "Error: Missing argument. Provide the script name"
+            print(errormessage)
+            return {
+                    'statusCode': 400,
+                    'body': errormessage
+                    }
+            
+        script_name = sys.argv[1]
+        process = subprocess.Popen(['/bin/bash', script_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         returncode = process.returncode
 
