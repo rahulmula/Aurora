@@ -1,3 +1,9 @@
+dir(dbName) {
+						def msg = powershell(returnStdout: true, script: '& "${env:dbsqlpackagepath}" /Action:Export /ssn:"${env:srcsqlServerName}".database.windows.net /sdn:${env:srcdbName}  /su:"${env:srcdbUserName}" /sp:"${env:srcdbPassword}" /tf:.\\"${env:srcartifactdacpacname}".bacpac')
+						println msg
+					}
+
+
 def get_cloudwatch_alarm_tags(cloudwatch_client):
     alarms = cloudwatch_client.describe_alarms()['MetricAlarms']
     tags_data = []
