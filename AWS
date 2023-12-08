@@ -1,3 +1,56 @@
+def get_launch_template_details(template_name):
+    ec2_client = boto3.client('ec2')
+    
+    response = ec2_client.describe_launch_templates(
+        LaunchTemplateNames=[template_name]
+    )
+    
+    if 'LaunchTemplates' in response:
+        launch_template = response['LaunchTemplates'][0]
+        return launch_template
+    else:
+        print(f"Launch template with name {template_name} not found.")
+        return None
+
+def update_launch_template_tags(template_id, tags):
+    ec2_client = boto3.client('ec2')
+    
+    response = ec2_client.create_tags(
+        Resources=[template_id],
+        Tags=tags
+    )
+    
+    print(f"Tags updated for launch template {template_id}")
+    return response
+
+if __name__ == "__main__":
+    # Replace 'your_launch_template_name' with the actual launch template name
+    launch_template_name = 'your_launch_template_name'
+    
+    # Replace 'your_new_tags' with the tags you want to update or add
+    new_tags = [
+        {'Key': 'Environment', 'Value': 'Production'},
+        {'Key': 'Owner', 'Value': 'YourName'}
+    ]
+    
+    # Get launch template details
+    launch_template_details = get_launch_template_details(launch_template_name)
+    
+    if launch_template_details:
+        template_id = launch_template_details['LaunchTemplateId']
+        
+        # Print current tags
+        print("Current Tags:")
+        print(launch_template_details.get('Tags', []))
+        
+        # Update launch template tags
+        update_launch_template_tags(template_id, new_tags)
+    else:
+        print("Unable to retrieve launch template details.")
+
+
+
+
 No packages.config, project or solution file specified. Use the -self switch to update NuGet.exe.
 
 
