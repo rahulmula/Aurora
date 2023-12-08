@@ -1,3 +1,12 @@
+Update-Package : The term 'Update-Package' is not recognized as the name of a cmdlet, function, script file, or
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try
+again.
+At line:1 char:1
++ Update-Package -Id System.Net.Http.Extensions
++ ~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Update-Package:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
 App_Start\WebApiConfig.cs(13,23): error CS0234: The type or namespace name 'Extensions' does not exist in the namespace 'System.Net.Http' (are you missing an assembly reference?) [F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel\ecat-systems\ecat-systems\EcatSystems.csproj]
 
 F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe" "ecat-systems\ecat-systems.sln" /p:Configuration=Release /p:Platform=x64 /t:Rebuild 
