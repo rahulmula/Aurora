@@ -1,3 +1,5 @@
+App_Start\WebApiConfig.cs(13,23): error CS0234: The type or namespace name 'Extensions' does not exist in the namespace 'System.Net.Http' (are you missing an assembly reference?) [F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel\ecat-systems\ecat-systems\EcatSystems.csproj]
+
 F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe" "ecat-systems\ecat-systems.sln" /p:Configuration=Release /p:Platform=x64 /t:Rebuild 
 
 Image ARN: arn:aws:imagebuilder:us-east-2:933919336272:image/qa-na-19dv/4.0.0/15 failed with error: Workflow Execution ID: 'wf-8dc24a6f-f299-40a6-807b-4ffee3de4d84' failed with reason: failed to download the EC2 Image Builder Component 'arn:aws:imagebuilder:us-east-2:933919336272:component/qa-na-19dv/5.0.0/1'. Error - operation error imagebuilder: GetComponent, failed to sign request: failed to retrieve credentials: failed to refresh cached credentials, no EC2 IMDS role found, operation error ec2imds: GetMetadata, canceled, context deadline exceeded.
