@@ -1,3 +1,41 @@
+import boto3
+
+def get_instance_tags_by_launch_template_id(launch_template_id):
+    ec2_client = boto3.client('ec2')
+
+    response = ec2_client.describe_instances(
+        Filters=[
+            {
+                'Name': 'tag:aws:ec2launchtemplate:id',
+                'Values': [launch_template_id]
+            },
+        ]
+    )
+
+    instance_tags = []
+
+    for reservation in response.get('Reservations', []):
+        for instance in reservation.get('Instances', []):
+            tags = instance.get('Tags', [])
+            instance_tags.extend(tags)
+
+    return instance_tags
+
+if __name__ == "__main__":
+    # Replace 'your_launch_template_id' with the actual launch template ID
+    launch_template_id = 'your_launch_template_id'
+
+    # Get instance tags based on launch template ID
+    instance_tags = get_instance_tags_by_launch_template_id(launch_template_id)
+
+    if instance_tags:
+        print(f"Tags for instances using launch template {launch_template_id}:")
+        for tag in instance_tags:
+            print(f"{tag['Key']}: {tag['Value']}")
+    else:
+        print(f"No instances found with launch template ID {launch_template_id}.")
+
+__________________________________________
 def get_instance_tags(instance_id):
     ec2_client = boto3.client('ec2')
     
