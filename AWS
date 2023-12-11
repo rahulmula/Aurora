@@ -18,6 +18,77 @@ def get_launch_template_tags(ec2_client, launch_template_id):
 
         for tag in tags:
             tags_data.append(['LaunchTemplate', launch_template_id, tag['Key'], tag['Value']])
+                
+        return tags_data
+
+    except Exception as error:
+        print(f'Exception in get_launch_template_tags(): {str(error)}')
+        return []
+
+def get_all_launch_template_tags(ec2_client):
+    all_launch_templates = get_all_launch_templates(ec2_client)
+    all_tags_data = []
+
+    for launch_template in all_launch_templates:
+        launch_template_id = launch_template['LaunchTemplateId']
+        launch_template_tags = get_launch_template_tags(ec2_client, launch_template_id)
+        all_tags_data.extend(launch_template_tags)
+
+    return all_tags_data
+
+def get_all_tags():
+    # Replace 'YOUR_REGION' with your AWS region
+    region = 'YOUR_REGION'
+
+    # Replace 'YOUR_ACCESS_KEY' and 'YOUR_SECRET_KEY' with your AWS access key and secret key
+    aws_access_key = 'YOUR_ACCESS_KEY'
+    aws_secret_key = 'YOUR_SECRET_KEY'
+
+    # Create AWS client for EC2
+    ec2_client = boto3.client('ec2', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+
+    # Get tags for all Launch Templates
+    all_tags_data = get_all_launch_template_tags(ec2_client)
+
+    # Create Excel workbook and sheet
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    # Write header row
+    sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+
+    # Append tags for each Launch Template to the sheet
+    for row in all_tags_data:
+        sheet.append(row)
+
+    # Save Excel file
+    workbook.save('all_launch_template_tags_output.xlsx')
+
+if __name__ == "__main__":
+    get_all_tags()
+
+-----------------------------------------------------------
+
+import boto3
+import openpyxl
+
+def get_all_launch_templates(ec2_client):
+    try:
+        response = ec2_client.describe_launch_templates()
+        return response.get('LaunchTemplates', [])
+    except Exception as error:
+        print(f'Exception in get_all_launch_templates(): {str(error)}')
+        return []
+
+def get_launch_template_tags(ec2_client, launch_template_id):
+    try:
+        response = ec2_client.describe_launch_templates(LaunchTemplateIds=[launch_template_id])
+        launch_template = response['LaunchTemplates'][0]
+        tags = launch_template.get('Tags', [])
+        tags_data = []
+
+        for tag in tags:
+            tags_data.append(['LaunchTemplate', launch_template_id, tag['Key'], tag['Value']])
 
         return tags_data
 
