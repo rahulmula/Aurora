@@ -1,3 +1,47 @@
+import boto3
+
+def get_all_lambda_function_tags():
+    # Create Lambda client
+    lambda_client = boto3.client('lambda')
+
+    # Get a list of all Lambda functions
+    functions_response = lambda_client.list_functions()
+
+    if 'Functions' in functions_response:
+        all_function_tags = {}
+
+        # Iterate through each Lambda function
+        for function_info in functions_response['Functions']:
+            function_name = function_info['FunctionName']
+
+            # Get tags for the Lambda function
+            tags_response = lambda_client.list_tags(Resource=function_name)
+            
+            # Extract tags from the response
+            function_tags = tags_response.get('Tags', {})
+
+            # Add tags to the dictionary
+            all_function_tags[function_name] = function_tags
+
+        return all_function_tags
+    else:
+        print("No Lambda functions found.")
+        return None
+
+if __name__ == "__main__":
+    # Get tags for all Lambda functions
+    all_lambda_function_tags = get_all_lambda_function_tags()
+
+    if all_lambda_function_tags:
+        print("Tags for all Lambda functions:")
+        for function_name, tags in all_lambda_function_tags.items():
+            print(f"Function: {function_name}")
+            for key, value in tags.items():
+                print(f"  {key}: {value}")
+    else:
+        print("No Lambda functions found.")
+
+------------------------------------------------------------------
 As discussed over the call, I have compiled using below steps but I’m observing more errors compared to previous (pfa logs), could you please provide detail steps to compile the application ? 
 
  1 Set-Location -Path "F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel"
