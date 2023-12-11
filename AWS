@@ -1,3 +1,8 @@
+An error occurred (ValidationException) when calling the ListTags operation: 1 validation error detected: Value 'amplify-login-custom-message-5c90e6c2' at 'resource' failed to satisfy constraint: Member must satisfy regular expression pattern: arn:(aws[a-zA-Z-]*)?:lambda:[a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\d{1}:\d{12}:(function:[a-zA-Z0-9-_]+(:(\$LATEST|[a-zA-Z0-9-_]+))?|layer:[a-zA-Z0-9-_]+)
+No Lambda functions found.
+
+------------------------------------------------------------------------------------
+
 import boto3
 
 def get_all_lambda_function_tags():
