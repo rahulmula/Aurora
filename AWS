@@ -1,5 +1,70 @@
 import boto3
 import openpyxl
+
+def get_all_launch_templates(ec2_client):
+    try:
+        response = ec2_client.describe_launch_templates()
+        return response.get('LaunchTemplates', [])
+    except Exception as error:
+        print(f'Exception in get_all_launch_templates(): {str(error)}')
+        return []
+
+def get_launch_template_tags(ec2_client, launch_template_id):
+    try:
+        response = ec2_client.describe_launch_templates(LaunchTemplateIds=[launch_template_id])
+        launch_template = response['LaunchTemplates'][0]
+        tags = launch_template.get('Tags', [])
+        tags_data = []
+
+        for tag in tags:
+            tags_data.append(['LaunchTemplate', launch_template_id, tag['Key'], tag['Value']])
+
+        return tags_data
+
+    except Exception as error:
+        print(f'Exception in get_launch_template_tags(): {str(error)}')
+        return []
+
+def create_sheet_for_launch_template_tags(workbook, launch_template_id, launch_template_tags):
+    sheet_name = f'LaunchTemplate_{launch_template_id[:10]}'  # Use a portion of the Launch Template ID as the sheet name
+    sheet = workbook.create_sheet(title=sheet_name)
+    sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+
+    for row in launch_template_tags:
+        sheet.append(row)
+
+def get_all_tags():
+    try:
+        region = 'us-east-2'
+        ec2_client = boto3.client('ec2', region)
+        all_launch_templates = get_all_launch_templates(ec2_client)
+
+        # Create Excel workbook and sheets
+        workbook = openpyxl.Workbook()
+
+        for launch_template in all_launch_templates:
+            launch_template_id = launch_template['LaunchTemplateId']
+            launch_template_tags = get_launch_template_tags(ec2_client, launch_template_id)
+
+            # Create sheets for each Launch Template
+            create_sheet_for_launch_template_tags(workbook, launch_template_id, launch_template_tags)
+
+        # Save Excel file
+        workbook.save('tags_report.xlsx')
+
+    except Exception as error:
+        print(f'Exception in get_all_tags(): {str(error)}')
+
+def main():
+    get_all_tags()
+
+if __name__ == "__main__":
+    main()
+
+--------------------------------------------------------------------------------------------------------
+
+import boto3
+import openpyxl
 from contextlib import suppress
 
 region = 'us-east-2'
