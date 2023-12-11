@@ -1,3 +1,41 @@
+def get_instance_tags_from_launch_template(template_id):
+    ec2_client = boto3.client('ec2')
+
+    # Describe instances launched from the specified Launch Template
+    response = ec2_client.describe_instances(Filters=[{'Name': 'launch-template-id', 'Values': [template_id]}])
+
+    instance_tags = []
+
+    for reservation in response['Reservations']:
+        for instance in reservation['Instances']:
+            instance_id = instance['InstanceId']
+            tags = instance.get('Tags', [])
+            
+            if tags:
+                instance_tags.append({'InstanceId': instance_id, 'Tags': tags})
+
+    return instance_tags
+
+if __name__ == "__main__":
+    # Replace 'your_launch_template_id' with the actual Launch Template ID
+    launch_template_id = 'your_launch_template_id'
+
+    # Get tags for instances launched from the Launch Template
+    instance_tags = get_instance_tags_from_launch_template(launch_template_id)
+
+    if instance_tags:
+        print(f"Tags for instances launched from Launch Template {launch_template_id}:")
+        for instance_tag in instance_tags:
+            instance_id = instance_tag['InstanceId']
+            tags = instance_tag['Tags']
+            print(f"Instance ID: {instance_id}")
+            for tag in tags:
+                print(f"  {tag['Key']}: {tag['Value']}")
+    else:
+        print(f"No instances found for Launch Template {launch_template_id}.")
+
+---------------------------------------------------------------------------------------------
+
 import boto3
 import openpyxl
 
