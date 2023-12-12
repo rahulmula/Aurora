@@ -1,3 +1,7 @@
+exception in get_instance_tags_from_launch_template() An error occurred (InvalidParameterValue) when calling the DescribeInstances operation: The filter 'launch-template-id' is invalid
+
+---------------------------------------------------------------------------------
+
 Error adding tags to Lambda function arn:aws:lambda:us-east-2:933919336272:function:amplify-login-create-auth-challenge-755b7ff7: Parameter validation failed:
 Invalid type for parameter Tags, value: [{'Key': 'sce:app:name', 'Value': 'ecat'}, {'Key': 'sce:app:costcenter', 'Value': '104293'}, {'Key': 'sce:app:environment', 'Value': 'dev'}, {'Key': 'sce:app:region', 'Value': 'na'}, {'Key': 'sce:service:name', 'Value': 'lambda-dev-amplify-login-create-auth-challenge-755b7ff7'}, {'Key': 'sce:component:name', 'Value': 'amplify-login-create-auth-challenge-755b7ff7'}], type: <class 'list'>, valid types: <class 'dict'>
 
