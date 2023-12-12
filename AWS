@@ -1,3 +1,7 @@
+exception in get_instance_tags_from_launch_template() Expecting value: line 1 column 1 (char 0)
+
+----------------------------------------------------------------------
+
 import requests
 
 def get_instance_tags_from_launch_template():
