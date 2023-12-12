@@ -1,3 +1,54 @@
+def get_instance_tags_from_launch_template(template_id):
+    ec2_client = boto3.client('ec2')
+
+    # Get the Launch Template version for the specified Launch Template ID
+    response = ec2_client.describe_launch_template_versions(LaunchTemplateId=template_id)
+    
+    if 'LaunchTemplateVersions' in response and response['LaunchTemplateVersions']:
+        version_number = response['LaunchTemplateVersions'][0]['VersionNumber']
+
+        # Describe instances launched from the specified Launch Template version
+        response_instances = ec2_client.describe_instances(
+            Filters=[
+                {'Name': 'launch-template.version-number', 'Values': [str(version_number)]}
+            ]
+        )
+
+        instance_tags = []
+
+        for reservation in response_instances['Reservations']:
+            for instance in reservation['Instances']:
+                instance_id = instance['InstanceId']
+                tags = instance.get('Tags', [])
+
+                if tags:
+                    instance_tags.append({'InstanceId': instance_id, 'Tags': tags})
+
+        return instance_tags
+    else:
+        print(f"No Launch Template versions found for ID {template_id}.")
+        return None
+
+if __name__ == "__main__":
+    # Replace 'your_launch_template_id' with the actual Launch Template ID
+    launch_template_id = 'your_launch_template_id'
+
+    # Get tags for instances launched from the Launch Template
+    instance_tags = get_instance_tags_from_launch_template(launch_template_id)
+
+    if instance_tags:
+        print(f"Tags for instances launched from Launch Template {launch_template_id}:")
+        for instance_tag in instance_tags:
+            instance_id = instance_tag['InstanceId']
+            tags = instance_tag['Tags']
+            print(f"Instance ID: {instance_id}")
+            for tag in tags:
+                print(f"  {tag['Key']}: {tag['Value']}")
+    else:
+        print(f"No instances found for Launch Template {launch_template_id}.")
+
+________________________________________________________________________
+
 exception in get_instance_tags_from_launch_template() An error occurred (InvalidParameterValue) when calling the DescribeInstances operation: The filter 'launch-template-id' is invalid
 
 ---------------------------------------------------------------------------------
