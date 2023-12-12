@@ -1,3 +1,7 @@
+exception in get_instance_tags_from_launch_template() An error occurred (InvalidParameterValue) when calling the DescribeInstances operation: The filter 'launch-template.version-number' is invalid
+
+-------------------------------------------------------
+
 def get_instance_tags_from_launch_template(template_id):
     ec2_client = boto3.client('ec2')
 
