@@ -1,3 +1,24 @@
+def add_tags_to_lambda_function(lambda_arn, tags):
+    # Create Lambda client
+    lambda_client = boto3.client('lambda')
+
+    try:
+        # Add tags to the Lambda function
+        lambda_client.tag_resource(Resource=lambda_arn, Tags=tags)
+        print(f"Tags added to Lambda function {lambda_arn}")
+    except Exception as e:
+        print(f"Error adding tags to Lambda function {lambda_arn}: {str(e)}")
+
+if __name__ == "__main__":
+    # Replace 'your_lambda_arn' with the actual Lambda function ARN
+    lambda_arn = 'your_lambda_arn'
+
+    # Specify the tags you want to add
+    new_tags = {'Environment': 'Production', 'Owner': 'YourName'}
+
+    # Add tags to the Lambda function
+    add_tags_to_lambda_function(lambda_arn, new_tags)
+--------------------------------------------
 An error occurred (ValidationException) when calling the ListTags operation: 1 validation error detected: Value 'amplify-login-custom-message-5c90e6c2' at 'resource' failed to satisfy constraint: Member must satisfy regular expression pattern: arn:(aws[a-zA-Z-]*)?:lambda:[a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\d{1}:\d{12}:(function:[a-zA-Z0-9-_]+(:(\$LATEST|[a-zA-Z0-9-_]+))?|layer:[a-zA-Z0-9-_]+)
 No Lambda functions found.
 
