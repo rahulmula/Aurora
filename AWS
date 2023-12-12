@@ -1,3 +1,8 @@
+Error adding tags to Lambda function arn:aws:lambda:us-east-2:933919336272:function:amplify-login-create-auth-challenge-755b7ff7: Parameter validation failed:
+Invalid type for parameter Tags, value: [{'Key': 'sce:app:name', 'Value': 'ecat'}, {'Key': 'sce:app:costcenter', 'Value': '104293'}, {'Key': 'sce:app:environment', 'Value': 'dev'}, {'Key': 'sce:app:region', 'Value': 'na'}, {'Key': 'sce:service:name', 'Value': 'lambda-dev-amplify-login-create-auth-challenge-755b7ff7'}, {'Key': 'sce:component:name', 'Value': 'amplify-login-create-auth-challenge-755b7ff7'}], type: <class 'list'>, valid types: <class 'dict'>
+
+_________________________________________________________________________________________
+
 def add_tags_to_lambda_function(lambda_arn, tags):
     # Create Lambda client
     lambda_client = boto3.client('lambda')
