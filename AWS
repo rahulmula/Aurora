@@ -1,3 +1,18 @@
+mport boto3
+from botocore import metadata
+
+def get_instance_tags_from_launch_template():
+    try:
+        # Use botocore to get instance metadata
+        metadata_service = metadata.MetadataService()
+        metadata_response = metadata_service.get_instance_metadata()
+
+        # Extract Launch Template ID from metadata
+        launch_template_id = metadata_response.get('launch-template', {}).get('launchTemplateId')
+
+
+-----------------------------------------
+
 exception in get_instance_tags_from_launch_template() Expecting value: line 1 column 1 (char 0)
 
 ----------------------------------------------------------------------
