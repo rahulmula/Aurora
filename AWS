@@ -1,3 +1,6 @@
+amplify pull --appId "d1ymvlmc8umf0h" --amplify "{\\"envName\\":\\"dev\\"}" --frontend "{\\"frontend\\":\\"javascript\\",\\"framework\\":\\"react\\",\\"config\\":{\\"SourceDir\\":\\"src\\",\\"DistributionDir\\":\\"build\\",\\"BuildCommand\\":\\"npm run-script build\\",\\"StartCommand\\":\\"npm run-script start\\"}}" --providers "{\\"awscloudformation\\":{\\"configLevel\\":\\"project\\",\\"useProfile\\":false,\\"accessKeyId\\":\\"AKIA5S4POE5IICXESP4Z\\",\\"secretAccessKey\\":\\"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\\",\\"region\\":\\"us-east-2\\"}}" --yes
+-bash: amplify: command not found
+----------------------------------------------
 App_Start\WebApiConfig.cs(13,23): error CS0234: The type or namespace name 'Extensions' does not exist in the namespace 'System.Net.Http' (are you missing an assembly reference?) [F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel\ecat-systems\ecat-systems\EcatSystems.csproj]
 
 
