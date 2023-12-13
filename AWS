@@ -1,3 +1,12 @@
+amplify : The term 'amplify' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify
+that the path is correct and try again.
+At line:1 char:1
++ amplify pull --appId "d1ymvlmc8umf0h" --amplify "{\\"envName\\":\\"de ...
++ ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (amplify:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+--------------------------------------------------------
 amplify pull --appId "d1ymvlmc8umf0h" --amplify "{\\"envName\\":\\"dev\\"}" --frontend "{\\"frontend\\":\\"javascript\\",\\"framework\\":\\"react\\",\\"config\\":{\\"SourceDir\\":\\"src\\",\\"DistributionDir\\":\\"build\\",\\"BuildCommand\\":\\"npm run-script build\\",\\"StartCommand\\":\\"npm run-script start\\"}}" --providers "{\\"awscloudformation\\":{\\"configLevel\\":\\"project\\",\\"useProfile\\":false,\\"accessKeyId\\":\\"AKIA5S4POE5IICXESP4Z\\",\\"secretAccessKey\\":\\"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\\",\\"region\\":\\"us-east-2\\"}}" --yes
 -bash: amplify: command not found
 ----------------------------------------------
