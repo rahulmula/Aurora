@@ -1,3 +1,7 @@
+App_Start\WebApiConfig.cs(13,23): error CS0234: The type or namespace name 'Extensions' does not exist in the namespace 'System.Net.Http' (are you missing an assembly reference?) [F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel\ecat-systems\ecat-systems\EcatSystems.csproj]
+
+
+---------------------------------------------------------------------
 
 11:02:04  F:\Jenkins\workspace\QA\DM\Asia\19MV\AWS\DWGMGRDB_Rel>PowerShell.exe Set-ExecutionPolicy unrestricted -Scope CurrentUser 
 [Pipeline] powershell
