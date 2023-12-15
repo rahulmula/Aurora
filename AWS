@@ -1,3 +1,11 @@
+
+2023-12-15 02:55:21    ERROR   Error occurred during build: Command 01_copy_config_file_script failed
+2023-12-15 02:55:22    ERROR   [Instance: i-0682a9740b05ccf47 ConfigSet: Infra-WriteRuntimeConfig, Infra-EmbeddedPreBuild, Hook-PreAppDeploy, Infra-EmbeddedPostBuild, Hook-EnactAppDeploy, Hook-PostAppDeploy] Command failed on instance. Return code: 1 Output: null.
+2023-12-15 02:55:23    INFO    Command execution completed on all instances. Summary: [Successful: 0, Failed: 1].
+2023-12-15 02:55:23    ERROR   Unsuccessful command execution on instance id(s) 'i-0682a9740b05ccf47'. Aborting the operation.
+2023-12-15 02:55:23    ERROR   Failed to deploy application.
+ERROR: ServiceError - Failed to deploy application.
+-----------------------------------------------------------------
 amplify : The term 'amplify' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify
 that the path is correct and try again.
 At line:1 char:1
