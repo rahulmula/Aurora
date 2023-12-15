@@ -1,3 +1,21 @@
+def invokelambdafunctionurl(argtgtappval) {
+	withEnv(["serverName=${argtgtappval.servername}",
+		"dbName=${argtgtappval.dbname}",
+		"dbUserName=${argtgtappval.dbusername}",
+		"dbPassword=${argtgtappval.dbpassword}",
+        "s3BucketName=${argtgtappval.s3bucketname}",
+        "s3objectPath=${argtgtappval.s3objectpath}",
+        "dbArtifactdacpacName=${argtgtappval.dbartifactdacpacname}",
+        "lambdaFunctionName=${argtgtappval.lambdafunctionname}",
+        "profileName=${argtgtappval.profile}"
+	]) {
+	bat label: '', script: "PowerShell.exe Set-ExecutionPolicy unrestricted -Scope CurrentUser"
+	def msg = powershell(returnStdout: true, script: ".\\Scripts\\DeploymentScripts\\invokelambdafunctionurl.ps1 -lambdafunctionname ${lambdaFunctionName} -servername ${serverName} -dbname ${dbName} -dbusername ${dbUserName} -dbpassword ${dbPassword} -s3bucketname ${s3BucketName} -s3objectpath ${s3objectPath} -dbartifactdacpacname ${dbArtifactdacpacName} -profilename ${profileName}")
+	println msg
+	}
+}
+
+----------------------------------------------------
 F:\Jenkins\workspace\QA\ECAT\EMEA\Rooftops\EngDataProcess>PowerShell.exe Set-ExecutionPolicy unrestricted -Scope CurrentUser 
 [Pipeline] powershell
 14:29:31  Exception Thrown.
