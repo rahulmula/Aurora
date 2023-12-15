@@ -1,4 +1,14 @@
+F:\Jenkins\workspace\QA\ECAT\EMEA\Rooftops\EngDataProcess>PowerShell.exe Set-ExecutionPolicy unrestricted -Scope CurrentUser 
+[Pipeline] powershell
+14:29:31  Exception Thrown.
+14:29:31  Invoke-WebRequest : {"Message":"Forbidden"}
+14:29:31  At F:\Jenkins\workspace\QA\ECAT\EMEA\Rooftops\EngDataProcess\Scripts\DeploymentScripts\invokelambdafunctionurl.ps1:23 char:19
+14:29:31  + ... etcontent = Invoke-WebRequest -Uri $getUrl -Method POST -UseBasicPars ...
+14:29:31  +                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+14:29:31      + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebExc    eption
+14:29:31      + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
 
+------------------------------------------------
 def get_lambda_tags(lambda_client):
     functions = lambda_client.list_functions()['Functions']
     tags_data = []
