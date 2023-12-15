@@ -1,3 +1,8 @@
+
+2023-12-15 11:14:03    INFO    Batch 1: Registering instance(s) with the load balancer and waiting for them to be healthy. 
+2023-12-15 11:22:48    ERROR   Instance id(s) 'i-0fc1d4f7526bc4476' did not pass health check after command execution. Aborting the operation.
+2023-12-15 11:22:49    ERROR   Failed to deploy application.
+______________________________________________________________________________
 def invokelambdafunctionurl(argtgtappval) {
 	withEnv(["serverName=${argtgtappval.servername}",
 		"dbName=${argtgtappval.dbname}",
