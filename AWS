@@ -998,3 +998,1004 @@ def get_all_tags():
 
     # Save Excel file
     workbook.save('all_tags_output.xlsx')
+
+--------------------------------------------
+2023-12-15 02:55:21    ERROR   Error occurred during build: Command 01_copy_config_file_script failed
+2023-12-15 02:55:22    ERROR   [Instance: i-0682a9740b05ccf47 ConfigSet: Infra-WriteRuntimeConfig, Infra-EmbeddedPreBuild, Hook-PreAppDeploy, Infra-EmbeddedPostBuild, Hook-EnactAppDeploy, Hook-PostAppDeploy] Command failed on instance. Return code: 1 Output: null.
+2023-12-15 02:55:23    INFO    Command execution completed on all instances. Summary: [Successful: 0, Failed: 1].
+2023-12-15 02:55:23    ERROR   Unsuccessful command execution on instance id(s) 'i-0682a9740b05ccf47'. Aborting the operation.
+2023-12-15 02:55:23    ERROR   Failed to deploy application.
+ERROR: ServiceError - Failed to deploy application.
+-----------------------------------------------------------------
+amplify : The term 'amplify' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify
+that the path is correct and try again.
+At line:1 char:1
++ amplify pull --appId "d1ymvlmc8umf0h" --amplify "{\\"envName\\":\\"de ...
++ ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (amplify:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+--------------------------------------------------------
+amplify pull --appId "d1ymvlmc8umf0h" --amplify "{\\"envName\\":\\"dev\\"}" --frontend "{\\"frontend\\":\\"javascript\\",\\"framework\\":\\"react\\",\\"config\\":{\\"SourceDir\\":\\"src\\",\\"DistributionDir\\":\\"build\\",\\"BuildCommand\\":\\"npm run-script build\\",\\"StartCommand\\":\\"npm run-script start\\"}}" --providers "{\\"awscloudformation\\":{\\"configLevel\\":\\"project\\",\\"useProfile\\":false,\\"accessKeyId\\":\\"AKIA5S4POE5IICXESP4Z\\",\\"secretAccessKey\\":\\"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\\",\\"region\\":\\"us-east-2\\"}}" --yes
+-bash: amplify: command not found
+----------------------------------------------
+App_Start\WebApiConfig.cs(13,23): error CS0234: The type or namespace name 'Extensions' does not exist in the namespace 'System.Net.Http' (are you missing an assembly reference?) [F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel\ecat-systems\ecat-systems\EcatSystems.csproj]
+
+
+---------------------------------------------------------------------
+
+11:02:04  F:\Jenkins\workspace\QA\DM\Asia\19MV\AWS\DWGMGRDB_Rel>PowerShell.exe Set-ExecutionPolicy unrestricted -Scope CurrentUser 
+[Pipeline] powershell
+11:03:19  Exception Thrown.
+11:03:19  Invoke-WebRequest : The response content cannot be parsed because the Internet Explorer engine is not available, or Internet Explorer's first-launch configuration is not complete. Specify the 
+11:03:19  UseBasicParsing parameter and try again. 
+11:03:19  At F:\Jenkins\workspace\QA\DM\Asia\19MV\AWS\DWGMGRDB_Rel\Scripts\DeploymentScripts\invokelambdafunctionurl.ps1:23 char:19
+11:03:19  +     $getcontent = Invoke-WebRequest -Uri $getUrl -Method POST
+11:03:19  +                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+11:03:19      + CategoryInfo          : NotImplemented: (:) [Invoke-WebRequest], NotSupportedException
+11:03:19      + FullyQualifiedErrorId : WebCmdletIEDomNotSupportedException,Microsoft.PowerShell.Commands.InvokeWebRequestComman    d
+
+--------------------------------------------------------------------
+pip3 install hachoir-core==1.3.3
+Defaulting to user installation because normal site-packages is not writeable
+ERROR: Could not find a version that satisfies the requirement hachoir-core==1.3.3 (from versions: none)
+ERROR: No matching distribution found for hachoir-core==1.3.3
+
+----------------------------------------
+
+pip3 install metadata
+Defaulting to user installation because normal site-packages is not writeable
+Collecting metadata
+  Downloading metadata-0.2.tar.gz (1.5 kB)
+  Preparing metadata (setup.py) ... done
+  Downloading metadata-0.1.1.tar.gz (1.5 kB)
+  Preparing metadata (setup.py) ... done
+  Downloading metadata-0.1.tar.gz (1.1 kB)
+  Preparing metadata (setup.py) ... done
+ERROR: Cannot install metadata==0.1, metadata==0.1.1 and metadata==0.2 because these package versions have conflicting dependencies.
+
+The conflict is caused by:
+    metadata 0.2 depends on hachoir-core==1.3.3
+    metadata 0.1.1 depends on hachoir-core==1.3.3
+    metadata 0.1 depends on hachoir-core==1.3.3
+
+To fix this you could try to:
+1. loosen the range of package versions you've specified
+2. remove package versions to allow pip attempt to solve the dependency conflict
+
+ERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/user_guide/#fixing-conflicting-dependencies
+
+------------------------------------------------------------------------
+mport boto3
+from botocore import metadata
+
+def get_instance_tags_from_launch_template():
+    try:
+        # Use botocore to get instance metadata
+        metadata_service = metadata.MetadataService()
+        metadata_response = metadata_service.get_instance_metadata()
+
+        # Extract Launch Template ID from metadata
+        launch_template_id = metadata_response.get('launch-template', {}).get('launchTemplateId')
+
+
+-----------------------------------------
+
+exception in get_instance_tags_from_launch_template() Expecting value: line 1 column 1 (char 0)
+
+----------------------------------------------------------------------
+
+import requests
+
+def get_instance_tags_from_launch_template():
+    # Get the Launch Template ID from EC2 instance metadata
+    instance_metadata_url = "http://169.254.169.254/latest/dynamic/instance-identity/document"
+    response = requests.get(instance_metadata_url)
+    instance_metadata = response.json()
+    launch_template_id = instance_metadata.get('launchTemplate', {}).get('launchTemplateId')
+
+    if launch_template_id:
+        ec2_client = boto3.client('ec2')
+
+        # Describe instances launched from the specified Launch Template
+        response_instances = ec2_client.describe_instances(
+            Filters=[
+                {'Name': 'launch-template-id', 'Values': [launch_template_id]}
+            ]
+        )
+
+        instance_tags = []
+
+        for reservation in response_instances['Reservations']:
+            for instance in reservation['Instances']:
+                instance_id = instance['InstanceId']
+                tags = instance.get('Tags', [])
+
+                if tags:
+                    instance_tags.append({'InstanceId': instance_id, 'Tags': tags})
+
+        return instance_tags
+    else:
+        print("Unable to retrieve Launch Template ID from instance metadata.")
+        return None
+
+--------------------------------------
+
+exception in get_instance_tags_from_launch_template() An error occurred (InvalidParameterValue) when calling the DescribeInstances operation: The filter 'launch-template.version-number' is invalid
+
+-------------------------------------------------------
+
+def get_instance_tags_from_launch_template(template_id):
+    ec2_client = boto3.client('ec2')
+
+    # Get the Launch Template version for the specified Launch Template ID
+    response = ec2_client.describe_launch_template_versions(LaunchTemplateId=template_id)
+    
+    if 'LaunchTemplateVersions' in response and response['LaunchTemplateVersions']:
+        version_number = response['LaunchTemplateVersions'][0]['VersionNumber']
+
+        # Describe instances launched from the specified Launch Template version
+        response_instances = ec2_client.describe_instances(
+            Filters=[
+                {'Name': 'launch-template.version-number', 'Values': [str(version_number)]}
+            ]
+        )
+
+        instance_tags = []
+
+        for reservation in response_instances['Reservations']:
+            for instance in reservation['Instances']:
+                instance_id = instance['InstanceId']
+                tags = instance.get('Tags', [])
+
+                if tags:
+                    instance_tags.append({'InstanceId': instance_id, 'Tags': tags})
+
+        return instance_tags
+    else:
+        print(f"No Launch Template versions found for ID {template_id}.")
+        return None
+
+if __name__ == "__main__":
+    # Replace 'your_launch_template_id' with the actual Launch Template ID
+    launch_template_id = 'your_launch_template_id'
+
+    # Get tags for instances launched from the Launch Template
+    instance_tags = get_instance_tags_from_launch_template(launch_template_id)
+
+    if instance_tags:
+        print(f"Tags for instances launched from Launch Template {launch_template_id}:")
+        for instance_tag in instance_tags:
+            instance_id = instance_tag['InstanceId']
+            tags = instance_tag['Tags']
+            print(f"Instance ID: {instance_id}")
+            for tag in tags:
+                print(f"  {tag['Key']}: {tag['Value']}")
+    else:
+        print(f"No instances found for Launch Template {launch_template_id}.")
+
+________________________________________________________________________
+
+exception in get_instance_tags_from_launch_template() An error occurred (InvalidParameterValue) when calling the DescribeInstances operation: The filter 'launch-template-id' is invalid
+
+---------------------------------------------------------------------------------
+
+Error adding tags to Lambda function arn:aws:lambda:us-east-2:933919336272:function:amplify-login-create-auth-challenge-755b7ff7: Parameter validation failed:
+Invalid type for parameter Tags, value: [{'Key': 'sce:app:name', 'Value': 'ecat'}, {'Key': 'sce:app:costcenter', 'Value': '104293'}, {'Key': 'sce:app:environment', 'Value': 'dev'}, {'Key': 'sce:app:region', 'Value': 'na'}, {'Key': 'sce:service:name', 'Value': 'lambda-dev-amplify-login-create-auth-challenge-755b7ff7'}, {'Key': 'sce:component:name', 'Value': 'amplify-login-create-auth-challenge-755b7ff7'}], type: <class 'list'>, valid types: <class 'dict'>
+
+_________________________________________________________________________________________
+
+def add_tags_to_lambda_function(lambda_arn, tags):
+    # Create Lambda client
+    lambda_client = boto3.client('lambda')
+
+    try:
+        # Add tags to the Lambda function
+        lambda_client.tag_resource(Resource=lambda_arn, Tags=tags)
+        print(f"Tags added to Lambda function {lambda_arn}")
+    except Exception as e:
+        print(f"Error adding tags to Lambda function {lambda_arn}: {str(e)}")
+
+if __name__ == "__main__":
+    # Replace 'your_lambda_arn' with the actual Lambda function ARN
+    lambda_arn = 'your_lambda_arn'
+
+    # Specify the tags you want to add
+    new_tags = {'Environment': 'Production', 'Owner': 'YourName'}
+
+    # Add tags to the Lambda function
+    add_tags_to_lambda_function(lambda_arn, new_tags)
+--------------------------------------------
+An error occurred (ValidationException) when calling the ListTags operation: 1 validation error detected: Value 'amplify-login-custom-message-5c90e6c2' at 'resource' failed to satisfy constraint: Member must satisfy regular expression pattern: arn:(aws[a-zA-Z-]*)?:lambda:[a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\d{1}:\d{12}:(function:[a-zA-Z0-9-_]+(:(\$LATEST|[a-zA-Z0-9-_]+))?|layer:[a-zA-Z0-9-_]+)
+No Lambda functions found.
+
+------------------------------------------------------------------------------------
+
+import boto3
+
+def get_all_lambda_function_tags():
+    # Create Lambda client
+    lambda_client = boto3.client('lambda')
+
+    # Get a list of all Lambda functions
+    functions_response = lambda_client.list_functions()
+
+    if 'Functions' in functions_response:
+        all_function_tags = {}
+
+        # Iterate through each Lambda function
+        for function_info in functions_response['Functions']:
+            function_name = function_info['FunctionName']
+
+            # Get tags for the Lambda function
+            tags_response = lambda_client.list_tags(Resource=function_name)
+            
+            # Extract tags from the response
+            function_tags = tags_response.get('Tags', {})
+
+            # Add tags to the dictionary
+            all_function_tags[function_name] = function_tags
+
+        return all_function_tags
+    else:
+        print("No Lambda functions found.")
+        return None
+
+if __name__ == "__main__":
+    # Get tags for all Lambda functions
+    all_lambda_function_tags = get_all_lambda_function_tags()
+
+    if all_lambda_function_tags:
+        print("Tags for all Lambda functions:")
+        for function_name, tags in all_lambda_function_tags.items():
+            print(f"Function: {function_name}")
+            for key, value in tags.items():
+                print(f"  {key}: {value}")
+    else:
+        print("No Lambda functions found.")
+
+------------------------------------------------------------------
+As discussed over the call, I have compiled using below steps but I’m observing more errors compared to previous (pfa logs), could you please provide detail steps to compile the application ? 
+
+ 1 Set-Location -Path "F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel"
+ 2 SET HTTPS_PROXY=http://servproxy.carcgl.com:80
+ 3 F:\Softwares\nuget.exe restore ecat-systems\ecat-systems.sln
+ 4 & "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe" ".\ecat-systems\ecat-systems\EcatSystems.csproj" /p:DeployOnBuild=True /p:PublishProfile=FolderProfile /p:WebPublishMethod=FileSystem /p:Configuration=Release /p:Platform=x64 /p:DeleteExistingFiles=True /p:PublishUrl="F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngine_Rel\Publish"
+
+
+--------------------------------------------------------------------
+
+def get_instance_tags_from_launch_template(template_id):
+    ec2_client = boto3.client('ec2')
+
+    # Describe instances launched from the specified Launch Template
+    response = ec2_client.describe_instances(Filters=[{'Name': 'launch-template-id', 'Values': [template_id]}])
+
+    instance_tags = []
+
+    for reservation in response['Reservations']:
+        for instance in reservation['Instances']:
+            instance_id = instance['InstanceId']
+            tags = instance.get('Tags', [])
+            
+            if tags:
+                instance_tags.append({'InstanceId': instance_id, 'Tags': tags})
+
+    return instance_tags
+
+if __name__ == "__main__":
+    # Replace 'your_launch_template_id' with the actual Launch Template ID
+    launch_template_id = 'your_launch_template_id'
+
+    # Get tags for instances launched from the Launch Template
+    instance_tags = get_instance_tags_from_launch_template(launch_template_id)
+
+    if instance_tags:
+        print(f"Tags for instances launched from Launch Template {launch_template_id}:")
+        for instance_tag in instance_tags:
+            instance_id = instance_tag['InstanceId']
+            tags = instance_tag['Tags']
+            print(f"Instance ID: {instance_id}")
+            for tag in tags:
+                print(f"  {tag['Key']}: {tag['Value']}")
+    else:
+        print(f"No instances found for Launch Template {launch_template_id}.")
+
+---------------------------------------------------------------------------------------------
+
+import boto3
+import openpyxl
+
+def get_all_launch_templates(ec2_client):
+    try:
+        response = ec2_client.describe_launch_templates()
+        return response.get('LaunchTemplates', [])
+    except Exception as error:
+        print(f'Exception in get_all_launch_templates(): {str(error)}')
+        return []
+
+def get_launch_template_tags(ec2_client, launch_template_id):
+    try:
+        response = ec2_client.describe_launch_templates(LaunchTemplateIds=[launch_template_id])
+        launch_template = response['LaunchTemplates'][0]
+        tags = launch_template.get('Tags', [])
+        tags_data = []
+
+        for tag in tags:
+            tags_data.append(['LaunchTemplate', launch_template_id, tag['Key'], tag['Value']])
+                
+        return tags_data
+
+    except Exception as error:
+        print(f'Exception in get_launch_template_tags(): {str(error)}')
+        return []
+
+def get_all_launch_template_tags(ec2_client):
+    all_launch_templates = get_all_launch_templates(ec2_client)
+    all_tags_data = []
+
+    for launch_template in all_launch_templates:
+        launch_template_id = launch_template['LaunchTemplateId']
+        launch_template_tags = get_launch_template_tags(ec2_client, launch_template_id)
+        all_tags_data.extend(launch_template_tags)
+
+    return all_tags_data
+
+def get_all_tags():
+    # Replace 'YOUR_REGION' with your AWS region
+    region = 'YOUR_REGION'
+
+    # Replace 'YOUR_ACCESS_KEY' and 'YOUR_SECRET_KEY' with your AWS access key and secret key
+    aws_access_key = 'YOUR_ACCESS_KEY'
+    aws_secret_key = 'YOUR_SECRET_KEY'
+
+    # Create AWS client for EC2
+    ec2_client = boto3.client('ec2', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+
+    # Get tags for all Launch Templates
+    all_tags_data = get_all_launch_template_tags(ec2_client)
+
+    # Create Excel workbook and sheet
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    # Write header row
+    sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+
+    # Append tags for each Launch Template to the sheet
+    for row in all_tags_data:
+        sheet.append(row)
+
+    # Save Excel file
+    workbook.save('all_launch_template_tags_output.xlsx')
+
+if __name__ == "__main__":
+    get_all_tags()
+
+-----------------------------------------------------------
+
+import boto3
+import openpyxl
+
+def get_all_launch_templates(ec2_client):
+    try:
+        response = ec2_client.describe_launch_templates()
+        return response.get('LaunchTemplates', [])
+    except Exception as error:
+        print(f'Exception in get_all_launch_templates(): {str(error)}')
+        return []
+
+def get_launch_template_tags(ec2_client, launch_template_id):
+    try:
+        response = ec2_client.describe_launch_templates(LaunchTemplateIds=[launch_template_id])
+        launch_template = response['LaunchTemplates'][0]
+        tags = launch_template.get('Tags', [])
+        tags_data = []
+
+        for tag in tags:
+            tags_data.append(['LaunchTemplate', launch_template_id, tag['Key'], tag['Value']])
+
+        return tags_data
+
+    except Exception as error:
+        print(f'Exception in get_launch_template_tags(): {str(error)}')
+        return []
+
+def create_sheet_for_launch_template_tags(workbook, launch_template_id, launch_template_tags):
+    sheet_name = f'LaunchTemplate_{launch_template_id[:10]}'  # Use a portion of the Launch Template ID as the sheet name
+    sheet = workbook.create_sheet(title=sheet_name)
+    sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+
+    for row in launch_template_tags:
+        sheet.append(row)
+
+def get_all_tags():
+    try:
+        region = 'us-east-2'
+        ec2_client = boto3.client('ec2', region)
+        all_launch_templates = get_all_launch_templates(ec2_client)
+
+        # Create Excel workbook and sheets
+        workbook = openpyxl.Workbook()
+
+        for launch_template in all_launch_templates:
+            launch_template_id = launch_template['LaunchTemplateId']
+            launch_template_tags = get_launch_template_tags(ec2_client, launch_template_id)
+
+            # Create sheets for each Launch Template
+            create_sheet_for_launch_template_tags(workbook, launch_template_id, launch_template_tags)
+
+        # Save Excel file
+        workbook.save('tags_report.xlsx')
+
+    except Exception as error:
+        print(f'Exception in get_all_tags(): {str(error)}')
+
+def main():
+    get_all_tags()
+
+if __name__ == "__main__":
+    main()
+
+--------------------------------------------------------------------------------------------------------
+
+import boto3
+import openpyxl
+from contextlib import suppress
+
+region = 'us-east-2'
+
+def data_append(tags, instance_id, resource):
+    try:
+        tags_data = []
+        key_found = False
+        for tag in tags:
+            if tag['Key'].startswith('sce:'):
+                key_found = True
+
+        if key_found == True:
+            for tag in tags:
+                if tag['Key'].startswith('sce:'):
+                    tags_data.append([resource, instance_id, tag['Key'], tag['Value']])
+        else:
+            for i in range(6):
+                tags_data.append([resource, instance_id, "-", "-"])
+
+        return tags_data
+    except Exception as error:
+        print(f'excetion in data_append() {str(error)}')
+
+def get_ec2_tags(ec2_client):
+    try:
+        ec2_instances = ec2_client.describe_instances()['Reservations']
+        tags_data = []
+        tags = []
+
+        for reservation in ec2_instances:
+            for instance in reservation['Instances']:
+                instance_id = instance['InstanceId']
+                tags = instance.get('Tags', [])
+
+                #tags_data = data_append(tags, instance_id, "EC2")
+                key_found = False
+                for tag in tags:
+                    if tag['Key'].startswith('sce:'):
+                        key_found = True
+
+                if key_found == True:
+                    for tag in tags:
+                        if tag['Key'].startswith('sce:'):
+                            tags_data.append(['EC2', instance_id, tag['Key'], tag['Value']])
+                else:
+                    for i in range(6):
+                        tags_data.append(['EC2', instance_id, "-", "-"])
+
+        return tags_data
+    except Exception as error:
+        print(f'exception in get_ec2_tags() {str(error)}')
+
+
+def get_rds_tags(rds_client):
+    try:
+        rds_instances = rds_client.describe_db_instances()['DBInstances']
+        tags_data = []
+
+        for instance in rds_instances:
+            db_instance_identifier = instance['DBInstanceIdentifier']
+            arn = f"arn:aws:rds:{region}:933919336272:db:{db_instance_identifier}"
+            tags = rds_client.list_tags_for_resource(ResourceName=arn).get('TagList', [])
+
+            key_found = False
+            for tag in tags:
+                if tag['Key'].startswith('sce:'):
+                    key_found = True
+
+            if key_found == True:
+                for tag in tags:
+                    if tag['Key'].startswith('sce:'):
+                        tags_data.append(['RDS', db_instance_identifier, tag['Key'], tag['Value']])
+            else:
+                for i in range(6):
+                    tags_data.append(['RDS', db_instance_identifier, "-", "-"])
+
+        return tags_data
+    except Exception as error:
+        print(f'exception in get_rds_tags() {str(error)}')
+
+def get_elb_tags(elbv2_client):
+    try:
+        elbs = elbv2_client.describe_load_balancers()['LoadBalancers']
+        tags_data = []
+
+        for elb in elbs:
+            elb_name = elb['LoadBalancerName']
+            elb_arn = elb['LoadBalancerArn']
+            tags = elbv2_client.describe_tags(ResourceArns=[elb_arn]).get('TagDescriptions', [])
+            for tag_description in tags:
+                key_found = False
+                for tag in tag_description.get('Tags', []):
+                    if tag['Key'].startswith('sce:'):
+                        key_found = True
+
+
+                if key_found == True:
+                    for tag in tag_description.get('Tags', []):
+                        if tag['Key'].startswith('sce:'):
+                            tags_data.append(['ELB', elb_name, tag['Key'], tag['Value']])
+                else:
+                    for i in range(6):
+                        tags_data.append(['ELB', elb_name, "-", "-"])
+
+        return tags_data
+    except Exception as error:
+        print(f'exception in get_elb_tags() {str(error)}')
+
+
+def get_asg_tags(asg_client):
+    try:
+
+        asgs = asg_client.describe_auto_scaling_groups()['AutoScalingGroups']
+        tags_data = []
+
+        for asg in asgs:
+            asg_name = asg['AutoScalingGroupName']
+            tags = asg_client.describe_tags(Filters=[{'Name': 'auto-scaling-group', 'Values': [asg_name]}]).get('Tags', [])
+            key_found = False
+            for tag in tags:
+                if tag['Key'].startswith('sce:'):
+                    key_found = True
+
+            if key_found == True:
+                for tag in tags:
+                    if tag['Key'].startswith('sce:'):
+                        tags_data.append(['ASG', asg_name, tag['Key'], tag['Value']])
+            else:
+                for i in range(6):
+                    tags_data.append(['ASG', asg_name, "-", "-"])
+
+        return tags_data
+    except Exception as error:
+        print(f'excpetion in get_asg_tags() {str(error)}')
+
+def get_eip_tags(ec2_client):
+    try:
+        elastic_ips = ec2_client.describe_addresses()['Addresses']
+        tags_data = []
+
+        for elastic_ip in elastic_ips:
+            allocation_id = elastic_ip['AllocationId']
+            tags = ec2_client.describe_tags(Filters=[{'Name': 'resource-id', 'Values': [allocation_id]}]).get('Tags', [])
+
+            key_found = False
+            for tag in tags:
+                if tag['Key'].startswith('sce:'):
+                    key_found = True
+
+            if key_found == True:
+                for tag in tags:
+                    if tag['Key'].startswith('sce:'):
+                        tags_data.append(['EIP', allocation_id, tag['Key'], tag['Value']])
+            else:
+                for i in range(6):
+                    tags_data.append(['EIP', allocation_id, "-", "-"])
+
+        return tags_data
+    except Exception as error:
+        print(f'excpetion in get_eip_tags() {str(error)}')
+
+def get_cloudwatch_alarm_tags(cloudwatch_client):
+    try:
+        alarms = cloudwatch_client.describe_alarms()['MetricAlarms']
+        tags_data = []
+
+        for alarm in alarms:
+            alarm_name = alarm['AlarmName']
+            tags = cloudwatch_client.list_tags_for_resource(ResourceARN=alarm['AlarmArn']).get('Tags', [])
+
+            key_found = False
+            for tag in tags:
+                if tag['Key'].startswith('sce:'):
+                    key_found = True
+
+            if key_found == True:
+                for tag in tags:
+                    if tag['Key'].startswith('sce:'):
+                        tags_data.append(['CWAlarms', alarm_name, tag['Key'], tag['Value']])
+            else:
+                for i in range(6):
+                    tags_data.append(['CWAlarms', alarm_name, "-", "-"])
+
+                #tags_data.append(['CloudWatchAlarm', alarm_name, tag['Key'], tag['Value']])
+
+        return tags_data
+    except Exception as error:
+        print(f'excpetion in get_cloudwatch_alarm_tags() {str(error)}')
+
+def get_s3_buckets():
+    try:
+        tags_data = []
+        s3 = boto3.client('s3', region_name='us-east-2')
+        response = s3.list_buckets()
+
+        buckets = response['Buckets']
+        bucket_names = [bucket['Name'] for bucket in buckets]
+
+        for bucket_name in bucket_names:
+            tags = s3.get_bucket_tagging(Bucket=bucket_name).get('TagSet', [])
+            for tag in tags:
+                print(f"{tag['Key']}: {tag['Value']}")
+            key_found = False
+            for tag in tags:
+                if tag['Key'].startswith('sce:'):
+                    key_found = True
+
+            if key_found == True:
+                for tag in tags:
+                    if tag['Key'].startswith('sce:'):
+                        tags_data.append(['S3', bucket_name, tag['Key'], tag['Value']])
+            else:
+                for i in range(6):
+                    tags_data.append(['S3', bucket_name, "-", "-"])
+            print(tags_data)
+        return tags_data
+
+    except Exception as error:
+        pass
+        #print(f'exception in get_s3_buckets() {str(error)}')
+
+def get_s3_bucket_tags(bucket_name):
+    try:
+        tags = s3.get_bucket_tagging(Bucket=bucket_name).get('TagSet', [])
+
+        for tag in tags:
+            print(f"{tag['Key']}: {tag['Value']}")
+    except Exception as error:
+        print(f'exception in get_s3_buckets_tags() {str(error)}')
+
+
+def get_s3_tags(s3_client):
+    try:
+        s3_buckets = s3_client.list_buckets()['Buckets']
+        tags_data = []
+
+        for bucket in s3_buckets:
+            bucket_name = bucket['Name']
+            tags = s3_client.get_bucket_tagging(Bucket=bucket_name).get('TagSet', [])
+
+            key_found = False
+            for tag in tags:
+                if tag['Key'].startswith('sce:'):
+                    key_found = True
+
+            if key_found == True:
+                for tag in tags:
+                    if tag['Key'].startswith('sce:'):
+                        tags_data.append(['S3', bucket_name, tag['Key'], tag['Value']])
+            else:
+                for i in range(6):
+                    tags_data.append(['S3', bucket_name, "-", "-"])
+
+        return tags_data
+
+    except Exception as error:
+        print(f"exception in get_s3_tags() {str(error)}")
+
+
+def get_all_tags():
+    try:
+        # Create AWS clients for EC2, S3, and RDS
+        ec2_client = boto3.client('ec2', region)
+        #s3_client = boto3.client('s3', region_name = region, endpoint_url=f'https://s3.us-east-2.amazonaws.com')
+        #rds_client = boto3.client('rds', region)
+        elbv2_client = boto3.client('elbv2', region)
+        asg_client = boto3.client('autoscaling', region)
+        cloudwatch_client = boto3.client('cloudwatch', region)
+
+
+        # Get tags for each resource type
+        ec2_tags = get_ec2_tags(ec2_client)
+        #s3_tags = get_new_s3_buckets()
+        #rds_tags = get_rds_tags(rds_client)
+        elb_tags = get_elb_tags(elbv2_client)
+        asg_tags = get_asg_tags(asg_client)
+        eip_tags = get_eip_tags(ec2_client)
+        cloudwatch_tags = get_cloudwatch_alarm_tags(cloudwatch_client)
+
+
+        # Create Excel workbook and sheet
+        workbook = openpyxl.Workbook()
+        ec2_sheet = workbook.active
+        ec2_sheet.title = 'EC2 Tags'
+
+
+        #rds_sheet = workbook.create_sheet(title='RDS Tags')
+        elb_sheet = workbook.create_sheet(title='LoadBalancer Tags')
+        asg_sheet = workbook.create_sheet(title='AutoScalingGroup Tags')
+        eip_sheet = workbook.create_sheet(title='ElasticIP Tags')
+        cloudwatch_sheet = workbook.create_sheet(title='CloudWatch Tags')
+
+
+        # Write header row
+        ec2_sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+        #rds_sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+        elb_sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+        asg_sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+        eip_sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+        cloudwatch_sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+
+
+        # Append tags for each resource type to the sheet
+        for tags_data, sheet in zip([ec2_tags, elb_tags, asg_tags, eip_tags, cloudwatch_tags],[ec2_sheet, elb_sheet, asg_sheet, eip_sheet, cloudwatch_sheet]):
+            for row in tags_data:
+                sheet.append(row)
+
+        # Save Excel file
+        workbook.save('prod_na_tags_report_new.xlsx')
+
+
+    except Exception as error:
+        print(f'exception in get_all_tags() {str(error)}')
+
+
+def main():
+    get_all_tags()
+
+if __name__ == "__main__":
+    main()
+
+------------------------------------------------------------------------------------------
+
+import boto3
+
+def get_instance_tags_by_launch_template_id(launch_template_id):
+    ec2_client = boto3.client('ec2')
+
+    response = ec2_client.describe_instances(
+        Filters=[
+            {
+                'Name': 'tag:aws:ec2launchtemplate:id',
+                'Values': [launch_template_id]
+            },
+        ]
+    )
+
+    instance_tags = []
+
+    for reservation in response.get('Reservations', []):
+        for instance in reservation.get('Instances', []):
+            tags = instance.get('Tags', [])
+            instance_tags.extend(tags)
+
+    return instance_tags
+
+if __name__ == "__main__":
+    # Replace 'your_launch_template_id' with the actual launch template ID
+    launch_template_id = 'your_launch_template_id'
+
+    # Get instance tags based on launch template ID
+    instance_tags = get_instance_tags_by_launch_template_id(launch_template_id)
+
+    if instance_tags:
+        print(f"Tags for instances using launch template {launch_template_id}:")
+        for tag in instance_tags:
+            print(f"{tag['Key']}: {tag['Value']}")
+    else:
+        print(f"No instances found with launch template ID {launch_template_id}.")
+
+__________________________________________
+def get_instance_tags(instance_id):
+    ec2_client = boto3.client('ec2')
+    
+    response = ec2_client.describe_tags(
+        Filters=[
+            {
+                'Name': 'resource-id',
+                'Values': [instance_id]
+            },
+        ]
+    )
+    
+    if 'Tags' in response:
+        instance_tags = response['Tags']
+        return instance_tags
+    else:
+        print(f"No tags found for instance {instance_id}.")
+        return None
+
+if __name__ == "__main__":
+    # Replace 'your_instance_id' with the actual EC2 instance ID
+    instance_id = 'your_instance_id'
+    
+    # Get instance tags
+    instance_tags = get_instance_tags(instance_id)
+    
+    if instance_tags:
+        print(f"Tags for EC2 instance {instance_id}:")
+        for tag in instance_tags:
+            print(f"{tag['Key']}: {tag['Value']}")
+    else:
+        print("Unable to retrieve instance tags.")
+
+-------------------
+def get_launch_template_details(template_name):
+    ec2_client = boto3.client('ec2')
+    
+    response = ec2_client.describe_launch_templates(
+        LaunchTemplateNames=[template_name]
+    )
+    
+    if 'LaunchTemplates' in response:
+        launch_template = response['LaunchTemplates'][0]
+        return launch_template
+    else:
+        print(f"Launch template with name {template_name} not found.")
+        return None
+
+def update_launch_template_tags(template_id, tags):
+    ec2_client = boto3.client('ec2')
+    
+    response = ec2_client.create_tags(
+        Resources=[template_id],
+        Tags=tags
+    )
+    
+    print(f"Tags updated for launch template {template_id}")
+    return response
+
+if __name__ == "__main__":
+    # Replace 'your_launch_template_name' with the actual launch template name
+    launch_template_name = 'your_launch_template_name'
+    
+    # Replace 'your_new_tags' with the tags you want to update or add
+    new_tags = [
+        {'Key': 'Environment', 'Value': 'Production'},
+        {'Key': 'Owner', 'Value': 'YourName'}
+    ]
+    
+    # Get launch template details
+    launch_template_details = get_launch_template_details(launch_template_name)
+    
+    if launch_template_details:
+        template_id = launch_template_details['LaunchTemplateId']
+        
+        # Print current tags
+        print("Current Tags:")
+        print(launch_template_details.get('Tags', []))
+        
+        # Update launch template tags
+        update_launch_template_tags(template_id, new_tags)
+    else:
+        print("Unable to retrieve launch template details.")
+
+
+
+
+No packages.config, project or solution file specified. Use the -self switch to update NuGet.exe.
+
+
+Update-Package : The term 'Update-Package' is not recognized as the name of a cmdlet, function, script file, or
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try
+again.
+At line:1 char:1
++ Update-Package -Id System.Net.Http.Extensions
++ ~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Update-Package:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+App_Start\WebApiConfig.cs(13,23): error CS0234: The type or namespace name 'Extensions' does not exist in the namespace 'System.Net.Http' (are you missing an assembly reference?) [F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel\ecat-systems\ecat-systems\EcatSystems.csproj]
+
+F:\Jenkins\workspace\Dev\ECAT\FW\AWS\RulesEngineSandBox_Rel>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe" "ecat-systems\ecat-systems.sln" /p:Configuration=Release /p:Platform=x64 /t:Rebuild 
+
+Image ARN: arn:aws:imagebuilder:us-east-2:933919336272:image/qa-na-19dv/4.0.0/15 failed with error: Workflow Execution ID: 'wf-8dc24a6f-f299-40a6-807b-4ffee3de4d84' failed with reason: failed to download the EC2 Image Builder Component 'arn:aws:imagebuilder:us-east-2:933919336272:component/qa-na-19dv/5.0.0/1'. Error - operation error imagebuilder: GetComponent, failed to sign request: failed to retrieve credentials: failed to refresh cached credentials, no EC2 IMDS role found, operation error ec2imds: GetMetadata, canceled, context deadline exceeded.
+
+
+dir(dbName) {
+						def msg = powershell(returnStdout: true, script: '& "${env:dbsqlpackagepath}" /Action:Export /ssn:"${env:srcsqlServerName}".database.windows.net /sdn:${env:srcdbName}  /su:"${env:srcdbUserName}" /sp:"${env:srcdbPassword}" /tf:.\\"${env:srcartifactdacpacname}".bacpac')
+						println msg
+					}
+
+
+def get_cloudwatch_alarm_tags(cloudwatch_client):
+    alarms = cloudwatch_client.describe_alarms()['MetricAlarms']
+    tags_data = []
+
+    for alarm in alarms:
+        alarm_name = alarm['AlarmName']
+        tags = cloudwatch_client.list_tags_for_resource(ResourceARN=alarm['AlarmArn']).get('Tags', [])
+        for tag in tags:
+            tags_data.append(['CloudWatchAlarm', alarm_name, tag['Key'], tag['Value']])
+                
+    return tags_data
+
+def get_elb_tags(elbv2_client):
+    elbs = elbv2_client.describe_load_balancers()['LoadBalancers']
+    tags_data = []
+
+    for elb in elbs:
+        elb_arn = elb['LoadBalancerArn']
+        tags = elbv2_client.describe_tags(ResourceArns=[elb_arn]).get('TagDescriptions', [])
+        for tag_description in tags:
+            for tag in tag_description.get('Tags', []):
+                tags_data.append(['ELB', elb_arn, tag['Key'], tag['Value']])
+                
+    return tags_data
+
+def get_asg_tags(asg_client):
+    asgs = asg_client.describe_auto_scaling_groups()['AutoScalingGroups']
+    tags_data = []
+
+    for asg in asgs:
+        asg_name = asg['AutoScalingGroupName']
+        tags = asg_client.describe_tags(Filters=[{'Name': 'auto-scaling-group', 'Values': [asg_name]}]).get('Tags', [])
+        for tag in tags:
+            tags_data.append(['ASG', asg_name, tag['Key'], tag['Value']])
+                
+    return tags_data
+
+def get_elastic_ip_tags(ec2_client):
+    elastic_ips = ec2_client.describe_addresses()['Addresses']
+    tags_data = []
+
+    for elastic_ip in elastic_ips:
+        allocation_id = elastic_ip['AllocationId']
+        tags = ec2_client.describe_tags(Filters=[{'Name': 'resource-id', 'Values': [allocation_id]}]).get('Tags', [])
+        for tag in tags:
+            tags_data.append(['EIP', allocation_id, tag['Key'], tag['Value']])
+                
+    return tags_data
+
+def get_all_tags():
+    # Replace 'YOUR_REGION' with your AWS region
+    region = 'YOUR_REGION'
+
+    # Replace 'YOUR_ACCESS_KEY' and 'YOUR_SECRET_KEY' with your AWS access key and secret key
+    aws_access_key = 'YOUR_ACCESS_KEY'
+    aws_secret_key = 'YOUR_SECRET_KEY'
+
+    # Create AWS clients for EC2, ELB, ASG
+    ec2_client = boto3.client('ec2', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+    elbv2_client = boto3.client('elbv2', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+    asg_client = boto3.client('autoscaling', region_name=region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+
+    # Get tags for each resource type
+    ec2_tags = get_ec2_tags(ec2_client)
+    s3_tags = get_s3_tags(s3_client)
+    rds_tags = get_rds_tags(rds_client)
+    elb_tags = get_elb_tags(elbv2_client)
+    asg_tags = get_asg_tags(asg_client)
+    eip_tags = get_elastic_ip_tags(ec2_client)
+
+    # Create Excel workbook and sheet
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    # Write header row
+    sheet.append(['Resource Type', 'Resource ID', 'Tag Key', 'Tag Value'])
+
+    # Append tags for each resource type to the sheet
+    for tags_data in [ec2_tags, s3_tags, rds_tags, elb_tags, asg_tags, eip_tags]:
+        for row in tags_data:
+            sheet.append(row)
+
+    # Save Excel file
+    workbook.save('all_tags_output.xlsx')
