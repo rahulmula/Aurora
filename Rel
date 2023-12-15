@@ -1,1 +1,12 @@
 
+def get_lambda_tags(lambda_client):
+    functions = lambda_client.list_functions()['Functions']
+    tags_data = []
+
+    for function in functions:
+        function_name = function['FunctionName']
+        tags = lambda_client.list_tags(Resource=function['FunctionArn']).get('Tags', {})
+        for key, value in tags.items():
+            tags_data.append(['Lambda', function_name, key, value])
+                
+    return tags_data
